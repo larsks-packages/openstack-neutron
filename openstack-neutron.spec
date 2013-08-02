@@ -50,6 +50,7 @@ Source40:	neutron-mlnx-agent.upstart
 #
 # patches_base=2013.2.b2
 #
+Patch0001: 0001-use-parallel-installed-versions-in-RHEL6.patch
 
 BuildArch:	noarch
 
