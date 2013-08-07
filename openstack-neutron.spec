@@ -51,6 +51,7 @@ Source40:	neutron-mlnx-agent.upstart
 # patches_base=2013.2.b2
 #
 Patch0001: 0001-use-parallel-installed-versions-in-RHEL6.patch
+Patch0002: 0002-rename-quantum-into-neutron.patch
 
 BuildArch:	noarch
 
@@ -387,6 +388,7 @@ networks using multiple other neutron plugins.
 %setup -q -n neutron-%{version}.b2
 
 %patch0001 -p1
+%patch0002 -p1
 
 sed -i 's/%{version}/%{version}/' PKG-INFO
 
