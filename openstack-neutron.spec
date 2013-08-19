@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	0.3.b2%{?dist}
+Release:	0.3.1.b2%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b2
 
@@ -104,13 +104,13 @@ Obsoletes:	python-quantum < 2013.2-0.3.b2
 
 Requires:	MySQL-python
 Requires:	python-alembic
-Requires:	python-amqplib
+#Requires:	python-amqplib
 Requires:	python-anyjson
 Requires:	python-eventlet
 Requires:	python-greenlet
 Requires:	python-httplib2
 Requires:	python-iso8601
-Requires:	python-kombu
+#Requires:	python-kombu
 Requires:	python-lxml
 Requires:	python-paste-deploy1.5
 Requires:	python-routes1.12
@@ -880,6 +880,9 @@ fi
 
 
 %changelog
+* Mon Aug 19 2013 Lon Hohberger <lhh@redhat.com> - 2013.2-0.3.1.b2
+- Remove amqplib and kombu requirements
+
 * Thu Jul 25 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.3.b2
 - Update to havana milestone 2 release
 - Rename quantum to neutron
