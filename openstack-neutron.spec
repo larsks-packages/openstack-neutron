@@ -524,6 +524,9 @@ exit 0
 if [ $1 -eq 1 ] ; then
     # Initial installation
     /sbin/chkconfig --add neutron-server
+    for agent in dhcp l3 metadata lbaas; do
+      /sbin/chkconfig --add neutron-$agent-agent
+    done
 fi
 
 %preun
@@ -531,24 +534,19 @@ if [ $1 -eq 0 ] ; then
     # Package removal, not upgrade
     /sbin/service neutron-server stop >/dev/null 2>&1
     /sbin/chkconfig --del neutron-server
-    /sbin/service neutron-dhcp-agent stop >/dev/null 2>&1
-    /sbin/chkconfig --del neutron-dhcp-agent
-    /sbin/service neutron-l3-agent stop >/dev/null 2>&1
-    /sbin/chkconfig --del neutron-l3-agent
-	/sbin/service neutron-metadata-agent stop >/dev/null 2>&1
-	/sbin/chkconfig --del neutron-metadata-agent
-	/sbin/service neutron-lbaas-agent stop >/dev/null 2>&1
-	/sbin/chkconfig --del neutron-lbaas-agent
+    for agent in dhcp l3 metadata lbaas; do
+      /sbin/service neutron-$agent-agent stop >/dev/null 2>&1
+      /sbin/chkconfig --del neutron-$agent-agent
+    done
 fi
 
 %postun
 if [ $1 -ge 1 ] ; then
     # Package upgrade, not uninstall
     /sbin/service neutron-server condrestart >/dev/null 2>&1 || :
-    /sbin/service neutron-dhcp-agent condrestart >/dev/null 2>&1 || :
-    /sbin/service neutron-l3-agent condrestart >/dev/null 2>&1 || :
-    /sbin/service neutron-metadata-agent condrestart >/dev/null 2>&1 || :
-    /sbin/service neutron-lbaas-agent condrestart >/dev/null 2>&1 || :
+    for agent in dhcp l3 metadata lbaas; do
+      /sbin/service neutron-$agent-agent condrestart >/dev/null 2>&1 || :
+    done
 fi
 
 
@@ -611,6 +609,12 @@ if [ $1 -ge 1 ] ; then
     /sbin/service neutron-ryu-agent condrestart >/dev/null 2>&1 || :
 fi
 
+
+%post -n openstack-neutron-nec
+if [ $1 -eq 1 ] ; then
+    # Initial installation
+    /sbin/chkconfig --add neutron-nec-agent
+fi
 
 %preun -n openstack-neutron-nec
 if [ $1 -eq 0 ] ; then
@@ -895,6 +899,7 @@ fi
 %changelog
 * Tue Sep 17 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-0.9.b3
 - Fix typo in openstack-neutron-meetering-agent package name
+- Register all agent services with chkconfig during installation
 
 * Mon Sep 09 2013 Terry Wilson <twilson@rehdat.com> - 2013.2-0.4.b3
 - Update to havana milestone 3 release
