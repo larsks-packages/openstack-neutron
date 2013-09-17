@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	0.4.b3%{?dist}
+Release:	0.9.b3%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -383,13 +383,13 @@ This package contains the neutron plugin that implements virtual
 networks using multiple other neutron plugins.
 
 
-%package -n openstack-neutron-meetering-agent
+%package -n openstack-neutron-metering-agent
 Summary:	Neutron bandwidth metering agent
 Group:		Applications/System
 
 Requires:	openstack-neutron = %{version}-%{release}
 
-%description -n openstack-neutron-meetering-agent
+%description -n openstack-neutron-metering-agent
 Neutron provides an API to measure bandwidth utilization
 
 This package contains the neutron agent responsible for generating bandwidth
@@ -881,7 +881,7 @@ fi
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/plugins/metaplugin/*.ini
 
 
-%files -n openstack-neutron-meetering-agent
+%files -n openstack-neutron-metering-agent
 %doc LICENSE
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/metering_agent.ini
 %{_bindir}/neutron-metering-agent
@@ -892,8 +892,10 @@ fi
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/vpn_agent.ini
 %{_bindir}/neutron-vpn-agent
 
-
 %changelog
+* Tue Sep 17 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-0.9.b3
+- Fix typo in openstack-neutron-meetering-agent package name
+
 * Mon Sep 09 2013 Terry Wilson <twilson@rehdat.com> - 2013.2-0.4.b3
 - Update to havana milestone 3 release
 
