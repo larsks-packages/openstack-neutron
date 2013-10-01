@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # neutron-ovs-cleanup  OpenStack Open vSwitch cleanup utility
 #
@@ -12,7 +12,11 @@ proj=neutron
 prog=$proj-ovs-cleanup
 exec="/usr/bin/$prog"
 pidfile="/var/run/$proj/$prog.pid"
-config="/etc/$proj/plugins/openvswitch/ovs_neutron_plugin.ini"
+configs=(
+    "/usr/share/$proj/$proj-dist.conf" \
+    "/etc/$proj/$proj.conf" \
+    "/etc/$proj/plugins/openvswitch/ovs_neutron_plugin.ini" \
+)
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
@@ -20,8 +24,10 @@ lockfile=/var/lock/subsys/$prog
 
 start() {
     [ -x $exec ] || exit 5
-    [ -f $config ] || exit 6
-    daemon --user neutron $exec --log-file /var/log/$proj/ovs-cleanup.log --config-file /etc/$proj/$proj.conf --config-file $config &>/dev/null
+    for config in ${configs[@]}; do
+        [ -f $config ] || exit 6
+    done
+    daemon --user neutron $exec --log-file /var/log/$proj/ovs-cleanup.log ${configs[@]/#/--config-file } &>/dev/null
     retval=$?
     [ $retval -eq 0 ] && touch $lockfile
     return $retval

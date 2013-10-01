@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # neutron-lbaas-agent  OpenStack Neutron LBaaS Agent
 #
@@ -12,7 +12,11 @@ proj=neutron
 plugin=lbaas-agent
 prog=$proj-$plugin
 exec="/usr/bin/$prog"
-config="/etc/$proj/lbaas_agent.ini"
+configs=(
+    "/usr/share/$proj/$proj-dist.conf" \
+    "/etc/$proj/$proj.conf" \
+    "/etc/$proj/lbaas_agent.ini" \
+)
 pidfile="/var/run/$proj/$prog.pid"
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
@@ -21,9 +25,11 @@ lockfile=/var/lock/subsys/$prog
 
 start() {
     [ -x $exec ] || exit 5
-    [ -f $config ] || exit 6
+    for config in ${configs[@]}; do
+        [ -f $config ] || exit 6
+    done
     echo -n $"Starting $prog: "
-    daemon --user neutron --pidfile $pidfile "$exec --log-file /var/log/$proj/$plugin.log --config-file /etc/$proj/$proj.conf --config-file $config &>/dev/null & echo \$! > $pidfile"
+    daemon --user neutron --pidfile $pidfile "$exec --log-file /var/log/$proj/$plugin.log ${configs[@]/#/--config-file } &>/dev/null & echo \$! > $pidfile"
     retval=$?
     echo
     [ $retval -eq 0 ] && touch $lockfile
