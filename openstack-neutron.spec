@@ -72,6 +72,7 @@ Requires:	python-neutron = %{version}-%{release}
 Requires:	openstack-utils
 Requires:	python-keystone
 Requires:	python-pbr
+Requires:	python-pyudev
 
 Requires(post):		chkconfig
 Requires(postun):	initscripts
@@ -211,7 +212,6 @@ Obsoletes:	openstack-quantum-linuxbridge < 2013.2-0.3.b3
 
 Requires:	bridge-utils
 Requires:	openstack-neutron = %{version}-%{release}
-Requires:	python-pyudev
 
 
 %description -n openstack-neutron-linuxbridge
@@ -894,6 +894,10 @@ fi
 
 
 %changelog
+* Tue Oct 01 2013 Lon Hohberger <lhh@redhat.com> - 2013.2-0.3.3.b3
+- Fix python-pyudev dependency location.
+- Resolves: rhbz#1014398
+
 * Thu Sep 12 2013 Terry Wilson <twilson@rehdat.com> - 2013.2-0.3.2.b3
 - Update to havana milestone 3 release
 
