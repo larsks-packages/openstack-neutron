@@ -1,21 +1,21 @@
 #!/bin/bash
 #
-# neutron-l3-agent  OpenStack Neutron Layer 3 Agent
+# neutron-metering-agent  OpenStack Neutron Metering Agent
 #
 # chkconfig:   - 98 02
-# description: OpenStack Neutron Layer 3 Agent
+# description: OpenStack Neutron Metering Agent
 ### END INIT INFO
 
 . /etc/rc.d/init.d/functions
 
 proj=neutron
-plugin=l3-agent
+plugin=metering-agent
 prog=$proj-$plugin
 exec="/usr/bin/$prog"
 configs=(
     "/usr/share/$proj/$proj-dist.conf" \
     "/etc/$proj/$proj.conf" \
-    "/etc/$proj/l3_agent.ini" \
+    "/etc/$proj/metering_agent.ini" \
 )
 pidfile="/var/run/$proj/$prog.pid"
 

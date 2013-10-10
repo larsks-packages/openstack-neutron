@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	0.3.3.b3%{?dist}
+Release:	0.12.rc1%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -16,7 +16,7 @@ License:	ASL 2.0
 URL:		http://launchpad.net/neutron/
 
 #Source0:	http://launchpad.net/neutron/%{release_name}/%{version}/+download/neutron-%{version}.tar.gz
-Source0:	http://launchpad.net/neutron/%{release_name}/%{release_name}-2/+download/neutron-%{version}.b3.tar.gz
+Source0:	http://launchpad.net/neutron/%{release_name}/%{release_name}-2/+download/neutron-%{version}.rc1.tar.gz
 Source1:	neutron.logrotate
 Source2:	neutron-sudoers
 Source4:	neutron-server-setup
@@ -46,9 +46,14 @@ Source19:	neutron-lbaas-agent.init
 Source29:	neutron-lbaas-agent.upstart
 Source30:	neutron-mlnx-agent.init
 Source40:	neutron-mlnx-agent.upstart
+Source31:	neutron-vpn-agent.init
+Source41:	neutron-vpn-agent.upstart
+Source32:	neutron-metering-agent.init
+Source42:	neutron-metering-agent.upstart
 
+Source90:	neutron-dist.conf
 #
-# patches_base=2013.2.b3
+# patches_base=2013.2.rc1
 #
 Patch0001: 0001-use-parallel-installed-versions-in-RHEL6.patch
 
@@ -383,13 +388,13 @@ This package contains the neutron plugin that implements virtual
 networks using multiple other neutron plugins.
 
 
-%package -n openstack-neutron-meetering-agent
+%package -n openstack-neutron-metering-agent
 Summary:	Neutron bandwidth metering agent
 Group:		Applications/System
 
 Requires:	openstack-neutron = %{version}-%{release}
 
-%description -n openstack-neutron-meetering-agent
+%description -n openstack-neutron-metering-agent
 Neutron provides an API to measure bandwidth utilization
 
 This package contains the neutron agent responsible for generating bandwidth
@@ -400,6 +405,7 @@ Summary:	Neutron VPNaaS agent
 Group:		Applications/System
 
 Requires:	openstack-neutron = %{version}-%{release}
+Requires:	python-jinja2-26
 
 %description -n openstack-neutron-vpn-agent
 Neutron provides an API to implement VPN as a service
@@ -409,22 +415,13 @@ IPSec.
 
 
 %prep
-%setup -q -n neutron-%{version}.b3
+%setup -q -n neutron-%{version}.rc1
 
 %patch0001 -p1
 
-sed -i 's/%{version}/%{version}/' PKG-INFO
-
 find neutron -name \*.py -exec sed -i '/\/usr\/bin\/env python/d' {} \;
 
-# let RPM handle deps
-sed -i '/setup_requires/d; /install_requires/d; /dependency_links/d' setup.py
-
 chmod 644 neutron/plugins/cisco/README
-
-# Adjust configuration file content
-sed -i 's/debug = True/debug = False/' etc/neutron.conf
-sed -i 's/\# auth_strategy = keystone/auth_strategy = noauth/' etc/neutron.conf
 
 # Let's handle dependencies ourseleves
 rm -f requirements.txt
@@ -432,6 +429,21 @@ rm -f requirements.txt
 %build
 %{__python} setup.py build
 
+# Loop through values in neutron-dist.conf and make sure that the values
+# are substituted into the neutron.conf as comments. Some of these values
+# will have been uncommented as a way of upstream setting defaults outside
+# of the code. For service_provider and notification-driver, there are
+# commented examples above uncommented settings, so this specifically
+# skips those comments and instead comments out the actual settings and
+# substitutes the correct default values.
+while read name eq value; do
+  test "$name" && test "$value" || continue
+  if [ "$name" = "service_provider" -o "$name" = "notification_driver" ]; then
+    sed -ri "0,/^$name *=/{s!^$name *=.*!# $name = $value!}" etc/neutron.conf
+  else
+    sed -ri "0,/^(#)? *$name *=/{s!^(#)? *$name *=.*!# $name = $value!}" etc/neutron.conf
+  fi
+done < %{SOURCE90}
 
 %install
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
@@ -454,12 +466,6 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/neutron
 mv %{buildroot}/usr/etc/neutron/* %{buildroot}%{_sysconfdir}/neutron
 chmod 640  %{buildroot}%{_sysconfdir}/neutron/plugins/*/*.ini
 
-# Configure agents to use neutron-rootwrap
-sed -i 's/^# root_helper.*/root_helper = sudo neutron-rootwrap \/etc\/neutron\/rootwrap.conf/g' %{buildroot}%{_sysconfdir}/neutron/neutron.conf
-
-# Configure neutron-dhcp-agent state_path
-sed -i 's/state_path = \/opt\/stack\/data/state_path = \/var\/lib\/neutron/' %{buildroot}%{_sysconfdir}/neutron/dhcp_agent.ini
-
 # Install logrotate
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/openstack-neutron
 
@@ -478,6 +484,8 @@ install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/neutron-metadata-agen
 install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/neutron-ovs-cleanup
 install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/neutron-lbaas-agent
 install -p -D -m 755 %{SOURCE30} %{buildroot}%{_initrddir}/neutron-mlnx-agent
+install -p -D -m 755 %{SOURCE31} %{buildroot}%{_initrddir}/neutron-vpn-agent
+install -p -D -m 755 %{SOURCE32} %{buildroot}%{_initrddir}/neutron-metering-agent
 
 # Setup directories
 install -d -m 755 %{buildroot}%{_datadir}/neutron
@@ -503,6 +511,11 @@ install -p -m 644 %{SOURCE27} %{buildroot}%{_datadir}/neutron/
 install -p -m 644 %{SOURCE28} %{buildroot}%{_datadir}/neutron/
 install -p -m 644 %{SOURCE29} %{buildroot}%{_datadir}/neutron/
 install -p -m 644 %{SOURCE40} %{buildroot}%{_datadir}/neutron/
+install -p -m 644 %{SOURCE41} %{buildroot}%{_datadir}/neutron/
+install -p -m 644 %{SOURCE42} %{buildroot}%{_datadir}/neutron/
+
+# Install dist conf
+install -p -D -m 640 %{SOURCE90} %{buildroot}%{_datadir}/neutron/neutron-dist.conf
 
 # Install version info file
 cat > %{buildroot}%{_sysconfdir}/neutron/release <<EOF
@@ -524,6 +537,9 @@ exit 0
 if [ $1 -eq 1 ] ; then
     # Initial installation
     /sbin/chkconfig --add neutron-server
+    for agent in dhcp l3 metadata lbaas; do
+      /sbin/chkconfig --add neutron-$agent-agent
+    done
 fi
 
 %preun
@@ -531,24 +547,19 @@ if [ $1 -eq 0 ] ; then
     # Package removal, not upgrade
     /sbin/service neutron-server stop >/dev/null 2>&1
     /sbin/chkconfig --del neutron-server
-    /sbin/service neutron-dhcp-agent stop >/dev/null 2>&1
-    /sbin/chkconfig --del neutron-dhcp-agent
-    /sbin/service neutron-l3-agent stop >/dev/null 2>&1
-    /sbin/chkconfig --del neutron-l3-agent
-	/sbin/service neutron-metadata-agent stop >/dev/null 2>&1
-	/sbin/chkconfig --del neutron-metadata-agent
-	/sbin/service neutron-lbaas-agent stop >/dev/null 2>&1
-	/sbin/chkconfig --del neutron-lbaas-agent
+    for agent in dhcp l3 metadata lbaas; do
+      /sbin/service neutron-$agent-agent stop >/dev/null 2>&1
+      /sbin/chkconfig --del neutron-$agent-agent
+    done
 fi
 
 %postun
 if [ $1 -ge 1 ] ; then
     # Package upgrade, not uninstall
     /sbin/service neutron-server condrestart >/dev/null 2>&1 || :
-    /sbin/service neutron-dhcp-agent condrestart >/dev/null 2>&1 || :
-    /sbin/service neutron-l3-agent condrestart >/dev/null 2>&1 || :
-    /sbin/service neutron-metadata-agent condrestart >/dev/null 2>&1 || :
-    /sbin/service neutron-lbaas-agent condrestart >/dev/null 2>&1 || :
+    for agent in dhcp l3 metadata lbaas; do
+      /sbin/service neutron-$agent-agent condrestart >/dev/null 2>&1 || :
+    done
 fi
 
 
@@ -612,6 +623,12 @@ if [ $1 -ge 1 ] ; then
 fi
 
 
+%post -n openstack-neutron-nec
+if [ $1 -eq 1 ] ; then
+    # Initial installation
+    /sbin/chkconfig --add neutron-nec-agent
+fi
+
 %preun -n openstack-neutron-nec
 if [ $1 -eq 0 ] ; then
     # Package removal, not upgrade
@@ -647,6 +664,45 @@ if [ $1 -ge 1 ] ; then
     /sbin/service neutron-mlnx-agent condrestart >/dev/null 2>&1 || :
 fi
 
+
+%post -n openstack-neutron-vpn-agent
+if [ $1 -eq 1 ] ; then
+    # Initial installation
+    /sbin/chkconfig --add neutron-vpn-agent
+fi
+
+%preun -n openstack-neutron-vpn-agent
+if [ $1 -eq 0 ] ; then
+    # Package removal, not upgrade
+    /sbin/service neutron-vpn-agent stop >/dev/null 2>&1
+    /sbin/chkconfig --del neutron-vpn-agent
+fi
+
+%postun -n openstack-neutron-vpn-agent
+if [ $1 -ge 1 ] ; then
+    # Package upgrade, not uninstall
+    /sbin/service neutron-vpn-agent condrestart >/dev/null 2>&1 || :
+fi
+
+
+%post -n openstack-neutron-metering-agent
+if [ $1 -eq 1 ] ; then
+    # Initial installation
+    /sbin/chkconfig --add neutron-metering-agent
+fi
+
+%preun -n openstack-neutron-metering-agent
+if [ $1 -eq 0 ] ; then
+    # Package removal, not upgrade
+    /sbin/service neutron-metering-agent stop >/dev/null 2>&1
+    /sbin/chkconfig --del neutron-metering-agent
+fi
+
+%postun -n openstack-neutron-metering-agent
+if [ $1 -ge 1 ] ; then
+    # Package upgrade, not uninstall
+    /sbin/service neutron-metering-agent condrestart >/dev/null 2>&1 || :
+fi
 
 %files
 %doc LICENSE
@@ -695,6 +751,7 @@ fi
 %{_datadir}/neutron/neutron-lbaas-agent.upstart
 %dir %{_sysconfdir}/neutron
 %{_sysconfdir}/neutron/release
+%attr(-, root, neutron) %{_datadir}/neutron/neutron-dist.conf
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/api-paste.ini
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/dhcp_agent.ini
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/l3_agent.ini
@@ -881,28 +938,39 @@ fi
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/plugins/metaplugin/*.ini
 
 
-%files -n openstack-neutron-meetering-agent
+%files -n openstack-neutron-metering-agent
 %doc LICENSE
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/metering_agent.ini
+%{_initrddir}/neutron-metering-agent
+%{_datadir}/neutron/neutron-metering-agent.upstart
 %{_bindir}/neutron-metering-agent
 
 
 %files -n openstack-neutron-vpn-agent
 %doc LICENSE
 %config(noreplace) %attr(0640, root, neutron) %{_sysconfdir}/neutron/vpn_agent.ini
+%{_initrddir}/neutron-vpn-agent
+%{_datadir}/neutron/neutron-vpn-agent.upstart
 %{_bindir}/neutron-vpn-agent
 
 
 %changelog
-* Tue Oct 01 2013 Lon Hohberger <lhh@redhat.com> - 2013.2-0.3.3.b3
-- Fix python-pyudev dependency location.
-- Resolves: rhbz#1014398
+* Thu Oct 10 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.12.rc1
+- Update to havana rc1
 
-* Thu Sep 12 2013 Terry Wilson <twilson@rehdat.com> - 2013.2-0.3.2.b3
+* Wed Oct  2 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.11.b3
+- Add python-jinja2 requires to VPN agent
+- Ad missing services for VPN and metering agent
+
+* Thu Sep 26 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.10.b3
+- Add support for neutron-dist.conf
+
+* Tue Sep 17 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-0.9.b3
+- Fix typo in openstack-neutron-meetering-agent package name
+- Register all agent services with chkconfig during installation
+
+* Mon Sep 09 2013 Terry Wilson <twilson@rehdat.com> - 2013.2-0.4.b3
 - Update to havana milestone 3 release
-
-* Mon Aug 19 2013 Lon Hohberger <lhh@redhat.com> - 2013.2-0.3.1.b2
-- Remove amqplib and kombu requirements
 
 * Thu Jul 25 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.3.b2
 - Update to havana milestone 2 release
