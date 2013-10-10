@@ -972,6 +972,9 @@ fi
 * Mon Sep 09 2013 Terry Wilson <twilson@rehdat.com> - 2013.2-0.4.b3
 - Update to havana milestone 3 release
 
+* Mon Aug 19 2013 Lon Hohberger <lhh@redhat.com> - 2013.2-0.3.1.b2
+- Remove amqplib and kombu requirements
+
 * Thu Jul 25 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.3.b2
 - Update to havana milestone 2 release
 - Rename quantum to neutron
