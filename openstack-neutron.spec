@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	0.11.b3%{?dist}
+Release:	0.12.rc1%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -16,7 +16,7 @@ License:	ASL 2.0
 URL:		http://launchpad.net/neutron/
 
 #Source0:	http://launchpad.net/neutron/%{release_name}/%{version}/+download/neutron-%{version}.tar.gz
-Source0:	http://launchpad.net/neutron/%{release_name}/%{release_name}-2/+download/neutron-%{version}.b3.tar.gz
+Source0:	http://launchpad.net/neutron/%{release_name}/%{release_name}-2/+download/neutron-%{version}.rc1.tar.gz
 Source1:	neutron.logrotate
 Source2:	neutron-sudoers
 Source4:	neutron-server-setup
@@ -53,7 +53,7 @@ Source42:	neutron-metering-agent.upstart
 
 Source90:	neutron-dist.conf
 #
-# patches_base=2013.2.b3
+# patches_base=2013.2.rc1
 #
 Patch0001: 0001-use-parallel-installed-versions-in-RHEL6.patch
 
@@ -415,7 +415,7 @@ IPSec.
 
 
 %prep
-%setup -q -n neutron-%{version}.b3
+%setup -q -n neutron-%{version}.rc1
 
 %patch0001 -p1
 
@@ -955,6 +955,9 @@ fi
 
 
 %changelog
+* Thu Oct 10 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.12.rc1
+- Update to havana rc1
+
 * Wed Oct  2 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.11.b3
 - Add python-jinja2 requires to VPN agent
 - Ad missing services for VPN and metering agent
