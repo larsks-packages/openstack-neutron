@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	0.12.rc1%{?dist}
+Release:	1%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -15,8 +15,7 @@ Group:		Applications/System
 License:	ASL 2.0
 URL:		http://launchpad.net/neutron/
 
-#Source0:	http://launchpad.net/neutron/%{release_name}/%{version}/+download/neutron-%{version}.tar.gz
-Source0:	http://launchpad.net/neutron/%{release_name}/%{release_name}-2/+download/neutron-%{version}.rc1.tar.gz
+Source0:	http://launchpad.net/neutron/%{release_name}/%{version}/+download/neutron-%{version}.tar.gz
 Source1:	neutron.logrotate
 Source2:	neutron-sudoers
 Source4:	neutron-server-setup
@@ -53,7 +52,7 @@ Source42:	neutron-metering-agent.upstart
 
 Source90:	neutron-dist.conf
 #
-# patches_base=2013.2.rc1
+# patches_base=2013.2
 #
 Patch0001: 0001-use-parallel-installed-versions-in-RHEL6.patch
 
@@ -415,7 +414,7 @@ IPSec.
 
 
 %prep
-%setup -q -n neutron-%{version}.rc1
+%setup -q -n neutron-%{version}
 
 %patch0001 -p1
 
@@ -955,6 +954,9 @@ fi
 
 
 %changelog
+* Fri Oct 18 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-1
+- Update to havana GA
+
 * Thu Oct 10 2013 Terry Wilson <twilson@redhat.com> - 2013.2-0.12.rc1
 - Update to havana rc1
 
