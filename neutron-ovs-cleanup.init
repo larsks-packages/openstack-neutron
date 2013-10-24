@@ -17,6 +17,7 @@ configs=(
     "/etc/$proj/$proj.conf" \
     "/etc/$proj/plugins/openvswitch/ovs_neutron_plugin.ini" \
 )
+configs_str=${configs[@]/#/--config-file }
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
@@ -27,7 +28,7 @@ start() {
     for config in ${configs[@]}; do
         [ -f $config ] || exit 6
     done
-    runuser -s /bin/bash neutron $exec --log-file /var/log/$proj/ovs-cleanup.log ${configs[@]/#/--config-file } &>/dev/null
+    runuser -s /bin/bash neutron -c "$exec --log-file /var/log/$proj/ovs-cleanup.log $configs_str &>/dev/null"
     retval=$?
     [ $retval -eq 0 ] && touch $lockfile
     return $retval
