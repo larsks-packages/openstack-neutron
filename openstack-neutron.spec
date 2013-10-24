@@ -1,11 +1,11 @@
 #
-# This is 2013.1.2 release
+# This is 2013.2 release
 #
 %global release_name havana
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	2%{?dist}
+Release:	3%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -954,8 +954,11 @@ fi
 
 
 %changelog
-* Thu Oct 24 2013 Terry Wilson <twilson@redhat.com> - 2013.1.4-2
-- Ensure that quantum-ovs-cleanup completes before exiting (rhbz#1022578)
+* Thu Oct 24 2013 Terry Wilson <twilson@redhat.com> - 2013.2.4-3
+- Fix previous quantum-ovs-cleanup fix
+
+* Thu Oct 24 2013 Terry Wilson <twilson@redhat.com> - 2013.2.4-2
+- Ensure that quantum-ovs-cleanup completes before exiting (rhbz#1019101)
 
 * Fri Oct 18 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-1
 - Update to havana GA
