@@ -954,10 +954,10 @@ fi
 
 
 %changelog
-* Thu Oct 24 2013 Terry Wilson <twilson@redhat.com> - 2013.2.4-3
+* Thu Oct 24 2013 Terry Wilson <twilson@redhat.com> - 2013.2-3
 - Fix previous neutron-ovs-cleanup fix
 
-* Thu Oct 24 2013 Terry Wilson <twilson@redhat.com> - 2013.2.4-2
+* Thu Oct 24 2013 Terry Wilson <twilson@redhat.com> - 2013.2-2
 - Ensure that neutron-ovs-cleanup completes before exiting (rhbz#1010941)
 
 * Fri Oct 18 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-1
