@@ -588,9 +588,9 @@ if [ -e %{_localstatedir}/lib/rpm-state/UPGRADE_FROM_QUANTUM ];then
     done
 
     # Re-create plugin.ini if it existed.
-    if [ -h %{_sysconfdir}/quantum/plugin.ini ];then
-        plugin_ini=$(readlink %{_sysconfdir}/quantum/plugin.ini)
-        ln -s ${plugin_ini//quantum/neutron} %{_sysconfdir}/neutron/plugin.ini
+    if [ -h %{_sysconfdir}/quantum/plugin.ini.rpmsave ];then
+        plugin_ini=$(readlink %{_sysconfdir}/quantum/plugin.ini.rpmsave)
+        ln -sf ${plugin_ini//quantum/neutron} %{_sysconfdir}/neutron/plugin.ini
     fi
 
     # Stamp the existing db as grizzly to avoid neutron-server breaking db migration
