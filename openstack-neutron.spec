@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -525,9 +525,9 @@ package = %{release}
 EOF
 
 %pre
-getent group neutron >/dev/null || groupadd -o -r neutron --gid 164
+getent group neutron >/dev/null || groupadd -r neutron
 getent passwd neutron >/dev/null || \
-    useradd -o --uid 164 -r -g neutron -d %{_sharedstatedir}/neutron -s /sbin/nologin \
+    useradd -r -g neutron -d %{_sharedstatedir}/neutron -s /sbin/nologin \
     -c "OpenStack Quantum Daemons" neutron
 exit 0
 
@@ -559,6 +559,47 @@ if [ $1 -ge 1 ] ; then
     for agent in dhcp l3 metadata lbaas; do
       /sbin/service neutron-$agent-agent condrestart >/dev/null 2>&1 || :
     done
+fi
+
+%pretrans
+if rpm --quiet -q openstack-quantum; then
+    mkdir -p  %{_localstatedir}/lib/rpm-state/
+
+    # Create a script for restoring init script enabling that we can also
+    # use as a flag to detect quantum -> grizzly upgrades in %posttrans
+    chkconfig --type sysv --list|grep ^quantum| \
+      sed -re 's/[0-6]:off//g
+               s/([0-6]):on\s*/\1/g
+               s/quantum/neutron/g
+               s/^([a-z0-9-]+)\s+([0-6]+)/chkconfig --levels \2 \1 on/' > %{_localstatedir}/lib/rpm-state/UPGRADE_FROM_QUANTUM
+fi
+
+%posttrans
+# Handle migration from quantum -> neutron
+if [ -e %{_localstatedir}/lib/rpm-state/UPGRADE_FROM_QUANTUM ];then
+    # Migrate existing config files
+    for i in `find /etc/quantum -name *.rpmsave`;do
+        new=${i//quantum/neutron}
+        new=${new/%.rpmsave/}
+        sed -e '/^sql_connection/ b
+                /^admin_user/ b
+                s/quantum/neutron/g
+                s/Quantum/Neutron/g' $i > $new
+    done
+
+    # Re-create plugin.ini if it existed.
+    if [ -h %{_sysconfdir}/quantum/plugin.ini ];then
+        plugin_ini=$(readlink %{_sysconfdir}/quantum/plugin.ini)
+        ln -s ${plugin_ini//quantum/neutron} %{_sysconfdir}/neutron/plugin.ini
+    fi
+
+    # Stamp the existing db as grizzly to avoid neutron-server breaking db migration
+    neutron-db-manage --config-file %{_sysconfdir}/neutron/neutron.conf --config-file %{_sysconfdir}/neutron/plugin.ini stamp grizzly || :
+
+    # Restore the enablement of the various neutron services
+    source %{_localstatedir}/lib/rpm-state/UPGRADE_FROM_QUANTUM
+
+    rm -f %{_localstatedir}/lib/rpm-state/UPGRADE_FROM_QUANTUM
 fi
 
 
@@ -954,6 +995,9 @@ fi
 
 
 %changelog
+* Wed Oct 30 2013 Terry Wilson <twilson@redaht.com> - 2013.2-4
+- Better support for upgrading from grizzly to havana
+
 * Thu Oct 24 2013 Terry Wilson <twilson@redhat.com> - 2013.2-3
 - Fix previous neutron-ovs-cleanup fix
 
