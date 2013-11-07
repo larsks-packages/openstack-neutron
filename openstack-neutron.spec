@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	4%{?dist}
+Release:	5%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -110,10 +110,12 @@ Requires:	MySQL-python
 Requires:	python-alembic
 #Requires:	python-amqplib
 Requires:	python-anyjson
+Requires:	python-babel
 Requires:	python-eventlet
 Requires:	python-greenlet
 Requires:	python-httplib2
 Requires:	python-iso8601
+Requires:	python-keystoneclient
 #Requires:	python-kombu
 Requires:	python-lxml
 Requires:	python-paste-deploy1.5
@@ -121,7 +123,7 @@ Requires:	python-routes1.12
 Requires:	python-sqlalchemy0.7
 Requires:	python-webob1.0
 Requires:	python-netaddr
-Requires:	python-oslo-config
+Requires:	python-oslo-config >= 1:1.2.0
 Requires:	python-qpid
 Requires:	python-neutronclient
 Requires:	sudo
@@ -995,6 +997,9 @@ fi
 
 
 %changelog
+* Thu Nov 07 2013 Terry Wilson <twilson@redhat.com> - 2013.2-5
+- Update deps for python-{babel,keystoneclient,oslo-config}
+
 * Wed Oct 30 2013 Terry Wilson <twilson@redaht.com> - 2013.2-4
 - Better support for upgrading from grizzly to havana
 
