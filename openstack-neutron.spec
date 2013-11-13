@@ -73,6 +73,7 @@ BuildRequires:	python-pbr
 BuildRequires:	python-d2to1
 
 
+Requires:	dnsmasq-utils
 Requires:	python-neutron = %{version}-%{release}
 Requires:	openstack-utils
 Requires:	python-keystone
@@ -998,6 +999,9 @@ fi
 
 
 %changelog
+* Mon Nov 13 2013 Terry Wilson <twilson@redhat.com> - 2013.2-7
+- Add dnsmasq-utils dependency to openstack-neutron
+
 * Wed Nov 13 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-6
 - Fix jinja2 import in openstack-neutron-vpn-agent
 
