@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	5%{?dist}
+Release:	6%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -997,6 +997,9 @@ fi
 
 
 %changelog
+* Wed Nov 13 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-6
+- Fix jinja2 import in openstack-neutron-vpn-agent
+
 * Thu Nov 07 2013 Terry Wilson <twilson@redhat.com> - 2013.2-5
 - Update deps for python-{babel,keystoneclient,oslo-config}
 

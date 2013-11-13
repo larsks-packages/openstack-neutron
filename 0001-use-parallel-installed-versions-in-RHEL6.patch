@@ -1,20 +1,20 @@
-From 1e3dd04afbfa4f29b2a43acf4075117b12fcad5e Mon Sep 17 00:00:00 2001
+From c7f7a43ab429da21c8dc9f8544b44a6407e37e5a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
 Date: Fri, 13 Apr 2012 17:24:40 +0100
 Subject: [PATCH] use parallel installed versions in RHEL6
 
-of webob sqlalchemy python-routes and paste-deploy
+of webob sqlalchemy python-routes paste-deploy python-jinja2-26
 
 Change-Id: I290f56eae61c87893639a9e5d29f7fff760452cf
 ---
- neutron/__init__.py | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ neutron/__init__.py |   31 +++++++++++++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
 
 diff --git a/neutron/__init__.py b/neutron/__init__.py
-index b2c81bd..764eee4 100644
+index b2c81bd..8f09807 100644
 --- a/neutron/__init__.py
 +++ b/neutron/__init__.py
-@@ -15,6 +15,36 @@
+@@ -15,6 +15,37 @@
  #    License for the specific language governing permissions and limitations
  #    under the License.
  
@@ -40,6 +40,7 @@ index b2c81bd..764eee4 100644
 +replace_dist("WebOb >= 1.0")
 +replace_dist("SQLAlchemy >= 0.6.3")
 +replace_dist("Routes >= 1.12.3")
++replace_dist("Jinja2 >= 2.6")
 +
 +replace_dist("PasteDeploy >= 1.5.0")
 +# This hack is needed because replace_dist() results in
