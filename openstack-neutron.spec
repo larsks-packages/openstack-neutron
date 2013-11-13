@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	6%{?dist}
+Release:	7%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -999,7 +999,7 @@ fi
 
 
 %changelog
-* Mon Nov 13 2013 Terry Wilson <twilson@redhat.com> - 2013.2-7
+* Wed Nov 13 2013 Terry Wilson <twilson@redhat.com> - 2013.2-7
 - Add dnsmasq-utils dependency to openstack-neutron
 
 * Wed Nov 13 2013 Pádraig Brady <pbrady@redhat.com> - 2013.2-6
