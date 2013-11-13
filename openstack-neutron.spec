@@ -420,7 +420,7 @@ IPSec.
 
 %patch0001 -p1
 
-find neutron -name \*.py -exec sed -i '/\/usr\/bin\/env python/d' {} \;
+find neutron -name \*.py -exec sed -i '/\/usr\/bin\/env python/{d;q}' {} +
 
 chmod 644 neutron/plugins/cisco/README
 
