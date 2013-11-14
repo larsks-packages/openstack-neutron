@@ -92,17 +92,17 @@ Requires:	dnsmasq
 
 
 %description
-Quantum is a virtual network service for Openstack. Just like
+Neutron is a virtual network service for Openstack. Just like
 OpenStack Nova provides an API to dynamically request and configure
-virtual servers, Quantum provides an API to dynamically request and
+virtual servers, Neutron provides an API to dynamically request and
 configure virtual networks. These networks connect "interfaces" from
 other OpenStack services (e.g., virtual NICs from Nova VMs). The
-Quantum API supports extensions to provide advanced network
+Neutron API supports extensions to provide advanced network
 capabilities (e.g., QoS, ACLs, network monitoring, etc.)
 
 
 %package -n python-neutron
-Summary:	Quantum Python libraries
+Summary:	Neutron Python libraries
 Group:		Applications/System
 
 Provides:	python-quantum = %{version}-%{release}
@@ -131,14 +131,14 @@ Requires:	python-neutronclient
 Requires:	sudo
 
 %description -n python-neutron
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron Python library.
 
 
 %package -n openstack-neutron-bigswitch
-Summary:	Quantum Big Switch plugin
+Summary:	Neutron Big Switch plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-bigswitch = %{version}-%{release}
@@ -148,7 +148,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-bigswitch
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -157,7 +157,7 @@ Networks Controller.
 
 
 %package -n openstack-neutron-brocade
-Summary:	Quantum Brocade plugin
+Summary:	Neutron Brocade plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-brocade = %{version}-%{release}
@@ -167,7 +167,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-brocade
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -175,7 +175,7 @@ networks using Brocade VCS switches running NOS.
 
 
 %package -n openstack-neutron-cisco
-Summary:	Quantum Cisco plugin
+Summary:	Neutron Cisco plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-cisco = %{version}-%{release}
@@ -186,7 +186,7 @@ Requires:	python-configobj
 
 
 %description -n openstack-neutron-cisco
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -194,7 +194,7 @@ networks using Cisco UCS and Nexus.
 
 
 %package -n openstack-neutron-hyperv
-Summary:	Quantum Hyper-V plugin
+Summary:	Neutron Hyper-V plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-hyperv = %{version}-%{release}
@@ -204,7 +204,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-hyperv
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -212,7 +212,7 @@ networks using Microsoft Hyper-V.
 
 
 %package -n openstack-neutron-linuxbridge
-Summary:	Quantum linuxbridge plugin
+Summary:	Neutron linuxbridge plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-linuxbridge = %{version}-%{release}
@@ -223,7 +223,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-linuxbridge
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -231,7 +231,7 @@ networks as VLANs using Linux bridging.
 
 
 %package -n openstack-neutron-midonet
-Summary:	Quantum MidoNet plugin
+Summary:	Neutron MidoNet plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-midonet = %{version}-%{release}
@@ -241,7 +241,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-midonet
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -249,7 +249,7 @@ networks using MidoNet from Midokura.
 
 
 %package -n openstack-neutron-ml2
-Summary:	Quantum ML2 plugin
+Summary:	Neutron ML2 plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-ml2 = %{version}-%{release}
@@ -259,7 +259,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-ml2
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains a neutron plugin that allows the use of drivers
@@ -268,7 +268,7 @@ for accessing those types.
 
 
 %package -n openstack-neutron-mellanox
-Summary:	Quantum Mellanox plugin
+Summary:	Neutron Mellanox plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-mellanox = %{version}-%{release}
@@ -278,12 +278,12 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-mellanox
-This plugin implements Quantum v2 APIs with support for Mellanox embedded
+This plugin implements Neutron v2 APIs with support for Mellanox embedded
 switch functionality as part of the VPI (Ethernet/InfiniBand) HCA.
 
 
 %package -n openstack-neutron-nicira
-Summary:	Quantum Nicira plugin
+Summary:	Neutron Nicira plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-nicira = %{version}-%{release}
@@ -293,7 +293,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-nicira
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -301,7 +301,7 @@ networks using Nicira NVP.
 
 
 %package -n openstack-neutron-openvswitch
-Summary:	Quantum openvswitch plugin
+Summary:	Neutron openvswitch plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-openvswitch = %{version}-%{release}
@@ -312,7 +312,7 @@ Requires:	openvswitch
 
 
 %description -n openstack-neutron-openvswitch
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -320,7 +320,7 @@ networks using Open vSwitch.
 
 
 %package -n openstack-neutron-plumgrid
-Summary:	Quantum PLUMgrid plugin
+Summary:	Neutron PLUMgrid plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-plumgrid = %{version}-%{release}
@@ -330,7 +330,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-plumgrid
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -338,7 +338,7 @@ networks using the PLUMgrid platform.
 
 
 %package -n openstack-neutron-ryu
-Summary:	Quantum Ryu plugin
+Summary:	Neutron Ryu plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-ryu = %{version}-%{release}
@@ -348,7 +348,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-ryu
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -356,7 +356,7 @@ networks using the Ryu Network Operating System.
 
 
 %package -n openstack-neutron-nec
-Summary:	Quantum NEC plugin
+Summary:	Neutron NEC plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-nec = %{version}-%{release}
@@ -366,7 +366,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-nec
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -374,7 +374,7 @@ networks using the NEC OpenFlow controller.
 
 
 %package -n openstack-neutron-metaplugin
-Summary:	Quantum meta plugin
+Summary:	Neutron meta plugin
 Group:		Applications/System
 
 Provides:	openstack-quantum-metaplugin = %{version}-%{release}
@@ -384,7 +384,7 @@ Requires:	openstack-neutron = %{version}-%{release}
 
 
 %description -n openstack-neutron-metaplugin
-Quantum provides an API to dynamically request and configure virtual
+Neutron provides an API to dynamically request and configure virtual
 networks.
 
 This package contains the neutron plugin that implements virtual
@@ -522,9 +522,9 @@ install -p -D -m 640 %{SOURCE90} %{buildroot}%{_datadir}/neutron/neutron-dist.co
 
 # Install version info file
 cat > %{buildroot}%{_sysconfdir}/neutron/release <<EOF
-[Quantum]
+[Neutron]
 vendor = Fedora Project
-product = OpenStack Quantum
+product = OpenStack Neutron
 package = %{release}
 EOF
 
@@ -532,7 +532,7 @@ EOF
 getent group neutron >/dev/null || groupadd -r neutron
 getent passwd neutron >/dev/null || \
     useradd -r -g neutron -d %{_sharedstatedir}/neutron -s /sbin/nologin \
-    -c "OpenStack Quantum Daemons" neutron
+    -c "OpenStack Neutron Daemons" neutron
 exit 0
 
 
