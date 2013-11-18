@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	8%{?dist}
+Release:	9%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -999,6 +999,9 @@ fi
 
 
 %changelog
+* Mon Nov 18 2013 Jakub Libosvar <jlibosva@redhat.com> - 2013.2-9
+- Set qpid_topology_version=2 in neutron-dist.conf (rhbz#1031025)
+
 * Mon Nov 18 2013 Alan Pevec <apevec@redhat.com> - 2013.2-8
 - move jinja2 dependency to the main package
 
