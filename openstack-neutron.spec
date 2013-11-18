@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	7%{?dist}
+Release:	8%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -117,6 +117,7 @@ Requires:	python-eventlet
 Requires:	python-greenlet
 Requires:	python-httplib2
 Requires:	python-iso8601
+Requires:	python-jinja2-26
 Requires:	python-keystoneclient
 #Requires:	python-kombu
 Requires:	python-lxml
@@ -408,7 +409,6 @@ Summary:	Neutron VPNaaS agent
 Group:		Applications/System
 
 Requires:	openstack-neutron = %{version}-%{release}
-Requires:	python-jinja2-26
 
 %description -n openstack-neutron-vpn-agent
 Neutron provides an API to implement VPN as a service
@@ -999,6 +999,9 @@ fi
 
 
 %changelog
+* Mon Nov 18 2013 Alan Pevec <apevec@redhat.com> - 2013.2-8
+- move jinja2 dependency to the main package
+
 * Wed Nov 13 2013 Terry Wilson <twilson@redhat.com> - 2013.2-7
 - Add dnsmasq-utils dependency to openstack-neutron
 
