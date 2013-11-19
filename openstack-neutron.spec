@@ -5,7 +5,7 @@
 
 Name:		openstack-neutron
 Version:	2013.2
-Release:	9%{?dist}
+Release:	10%{?dist}
 Provides:	openstack-quantum = %{version}-%{release}
 Obsoletes:	openstack-quantum < 2013.2-0.3.b3
 
@@ -64,7 +64,7 @@ BuildRequires:	python-setuptools
 # as setup.py build imports neutron.openstack.common.setup
 # which will then check for these
 BuildRequires:	python-sqlalchemy0.7
-BuildRequires:	python-webob1.0
+BuildRequires:	python-webob1.2
 BuildRequires:	python-paste-deploy1.5
 BuildRequires:	python-routes1.12
 BuildRequires:  python-jinja2-26
@@ -124,7 +124,7 @@ Requires:	python-lxml
 Requires:	python-paste-deploy1.5
 Requires:	python-routes1.12
 Requires:	python-sqlalchemy0.7
-Requires:	python-webob1.0
+Requires:	python-webob1.2
 Requires:	python-netaddr
 Requires:	python-oslo-config >= 1:1.2.0
 Requires:	python-qpid
@@ -999,6 +999,9 @@ fi
 
 
 %changelog
+* Tue Nov 19 2013 Alan Pevec <apevec@redhat.com> - 2013.2-10
+- update webob dependecy to 1.2 (rhbz#1031849)
+
 * Mon Nov 18 2013 Jakub Libosvar <jlibosva@redhat.com> - 2013.2-9
 - Set qpid_topology_version=2 in neutron-dist.conf (rhbz#1031025)
 

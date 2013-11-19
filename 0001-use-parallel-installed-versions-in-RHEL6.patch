@@ -37,7 +37,7 @@ index b2c81bd..8f09807 100644
 +            # and the associated pkg_resources.working_set.entries
 +            return pkg_resources.require(requirement)
 +
-+replace_dist("WebOb >= 1.0")
++replace_dist("WebOb >= 1.2")
 +replace_dist("SQLAlchemy >= 0.6.3")
 +replace_dist("Routes >= 1.12.3")
 +replace_dist("Jinja2 >= 2.6")
