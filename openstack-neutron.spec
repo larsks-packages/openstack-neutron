@@ -1000,7 +1000,7 @@ fi
 
 %changelog
 * Tue Nov 19 2013 Alan Pevec <apevec@redhat.com> - 2013.2-10
-- update webob dependecy to 1.2 (rhbz#1031849)
+- update webob dependency to 1.2 (rhbz#1031849)
 
 * Mon Nov 18 2013 Jakub Libosvar <jlibosva@redhat.com> - 2013.2-9
 - Set qpid_topology_version=2 in neutron-dist.conf (rhbz#1031025)
